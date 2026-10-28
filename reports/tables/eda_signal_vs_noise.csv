@@ -1,0 +1,13 @@
+,value
+level_std_pp,0.19356833547362823
+one_step_change_std_pp,0.1580327012841452
+h24_change_std_pp,0.28510297301105736
+h24_changes_observed,86.0
+change_std_max_pp,0.3112200083020705
+independent_noise_change_std_pp,0.27374696527279013
+first_horizon_at_independent_noise_line_steps,16.0
+random_walk_h24_change_std_pp,0.7741989616396633
+rolling_std_min_pp,0.0814090083192976
+rolling_std_max_pp,0.24786985977809534
+rolling_std_max_over_min,3.044747318452951
+hour_of_rolling_std_max,4.916666666666667

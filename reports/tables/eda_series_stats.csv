@@ -1,0 +1,12 @@
+,value
+mean_pct,9.414089019539007
+std_pp,0.19356833547362823
+min_pct,9.111633601754887
+hour_of_min,9.0
+max_pct,9.912175173984915
+hour_of_max,4.583333333333333
+range_pp,0.8005415722300278
+rolling_mean_max_pct,9.789516268243348
+hour_of_rolling_mean_max,5.5
+last_value_pct,9.164556174985146
+last_value_minus_mean_in_std,-1.2891201649448405

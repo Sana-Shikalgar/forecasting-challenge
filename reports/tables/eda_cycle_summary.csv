@@ -1,0 +1,13 @@
+,value
+strength_at_60_minutes,0.5929107854092426
+rank_of_60_minutes_among_scanned_periods,2.0
+scanned_periods,22.0
+strongest_other_period_steps,24.0
+strongest_other_period_strength,0.597693551248504
+strongest_period_below_24_steps,12.0
+profile_range_pp,0.34910158512035533
+residual_std_pp,0.11148591396084186
+lowest_position_minutes,20.0
+lowest_position_deviation_pp,-0.21119248758907794
+lowest_position_std_across_hours_pp,0.07268591558441814
+hours_below_zero_at_lowest_position,9.0

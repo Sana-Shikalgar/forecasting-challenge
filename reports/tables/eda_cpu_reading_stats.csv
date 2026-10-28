@@ -1,0 +1,7 @@
+,value
+mean_avg_cpu_pct,9.41408901953901
+median_avg_cpu_pct,5.119809152561594
+share_of_readings_avg_below_idle_level,0.48929
+share_of_readings_avg_above_high_level,0.012720909090909092
+share_of_readings_max_above_high_level,0.02951727272727273
+readings,1100000.0
