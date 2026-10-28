@@ -22,6 +22,10 @@ REQUIRED_READINGS_COLUMNS = ("timestamp", "vm_id", "avg_cpu")
 _READINGS_DTYPES = {"timestamp": "int64", "vm_id": str, "min_cpu": "float64", "max_cpu": "float64", "avg_cpu": "float64"}
 _METADATA_STRING_COLUMNS = ("vm_id", "subscription_id", "deployment_id", "vm_category", "virtual_core_bucket", "memory_gb_bucket")
 INTERVAL_SECONDS = 300
+SECONDS_PER_MINUTE = 60
+SECONDS_PER_HOUR = 60 * SECONDS_PER_MINUTE
+SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR
+STEPS_PER_HOUR = SECONDS_PER_HOUR // INTERVAL_SECONDS
 HOLDOUT_HORIZON = 24
 ACTIVE_VM_COUNT = "active_vm_count"
 AGGREGATE_CPU = "aggregate_cpu_utilization"
@@ -125,6 +129,8 @@ def build_targets(readings: pd.DataFrame) -> pd.DataFrame:
     require_columns(readings.columns, REQUIRED_READINGS_COLUMNS, "readings")
     if readings.empty:
         raise ValueError("readings contain no rows")
+    if readings["timestamp"].isna().any():
+        raise ValueError("readings contain missing timestamps")
     valid = readings.loc[_valid_cpu(readings["avg_cpu"]) & readings["vm_id"].notna(), ["timestamp", "vm_id", "avg_cpu"]]
     per_vm = valid.groupby(["timestamp", "vm_id"], sort=False)["avg_cpu"].mean()
     by_timestamp = per_vm.groupby(level="timestamp")
@@ -134,9 +140,9 @@ def build_targets(readings: pd.DataFrame) -> pd.DataFrame:
     return targets
 
 
-def load_targets(data_dir: str | Path | None = None) -> pd.DataFrame:
-    """Load the readings and return the target series (no metadata needed)."""
-    return build_targets(load_readings(data_dir))
+def select_timestamps(readings: pd.DataFrame, timestamps) -> pd.DataFrame:
+    """Keep only the readings whose timestamp is in ``timestamps`` (for example the training window)."""
+    return readings[readings["timestamp"].isin(timestamps)]
 
 
 def split_holdout(series: pd.DataFrame | pd.Series, horizon: int = HOLDOUT_HORIZON) -> tuple:
@@ -146,8 +152,8 @@ def split_holdout(series: pd.DataFrame | pd.Series, horizon: int = HOLDOUT_HORIZ
     Raises ``ValueError`` if ``horizon`` is not positive, the index is not sorted,
     or there are not more than ``horizon`` rows (at least one is left to train on).
     """
-    if horizon <= 0:
-        raise ValueError("horizon must be positive")
+    if isinstance(horizon, bool) or not isinstance(horizon, (int, np.integer)) or horizon <= 0:
+        raise ValueError("horizon must be a positive integer")
     if not series.index.is_monotonic_increasing:
         raise ValueError("series must be sorted chronologically")
     if len(series) <= horizon:
