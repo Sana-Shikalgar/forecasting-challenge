@@ -1,8 +1,11 @@
+import matplotlib
 import numpy as np
 import pandas as pd
 import pytest
 
 from cwfc.data import INTERVAL_SECONDS, STEPS_PER_HOUR
+
+matplotlib.use("Agg")  # figures are only saved in the tests, never shown
 
 HOURLY_PATTERN = np.sin(2 * np.pi * np.arange(STEPS_PER_HOUR) / STEPS_PER_HOUR)
 
