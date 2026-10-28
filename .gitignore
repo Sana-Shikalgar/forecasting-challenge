@@ -42,7 +42,7 @@ credentials*.json
 *.h5
 *.pt
 
-# Local planning notes (not part of the submission)
+# Local plan (not part of the submission)
 PLAN.md
 
 # Editors and OS
