@@ -1,0 +1,5 @@
+,MAE,RMSE,MAE ratio,Improvement %,High-load MAE,High-load RMSE,High-load bias,Fold MAE std,Folds better %
+Baseline,0.1943,0.2288,1.0,0.0,0.2944,0.3264,0.2942,0.0529,0.0
+Persistence,0.2378,0.2936,1.2237,-22.3691,0.2344,0.2839,0.1067,0.1044,38.4615
+Seasonal-naive,0.2811,0.3286,1.4462,-44.6235,0.305,0.3418,0.238,0.0869,17.9487
+History mean,0.205,0.242,1.0549,-5.4934,0.3089,0.3338,0.3089,0.0548,17.9487

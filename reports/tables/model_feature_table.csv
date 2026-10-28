@@ -1,0 +1,10 @@
+feature,definition,available at the forecast origin
+lag_1,latest observation at the origin,"yes, the last value seen"
+lag_2,observation one step before the origin,"yes, earlier than the origin"
+lag_3,observation two steps before the origin,"yes, earlier than the origin"
+lag_12,observation eleven steps before the origin (one hour before the first forecast step),"yes, earlier than the origin"
+mean_last_hour,mean of the latest 12 observations,"yes, earlier than or at the origin"
+last_change,latest observation minus the one before,"yes, earlier than or at the origin"
+profile_at_target,average hourly profile at the target's position in the hour,"yes, built from the history only; the position follows from the target timestamp"
+target_sin,sine of the target's position in the hour,"yes, the timestamp of a future step is known"
+target_cos,cosine of the target's position in the hour,"yes, the timestamp of a future step is known"

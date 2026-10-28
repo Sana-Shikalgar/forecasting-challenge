@@ -1,0 +1,4 @@
+,In-sample MAE,Cross-validated MAE,Cross-validated / in-sample
+ARIMA (one step ahead),0.0606,0.0824,1.3602
+Random forest (all steps),0.0916,0.1775,1.9367
+Baseline (all steps),0.1264,0.1943,1.5371
