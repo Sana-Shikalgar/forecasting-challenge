@@ -73,6 +73,18 @@ The hiring dataset is distributed as the fixed `data-v1` release of this reposit
 
 **Download:** [Azure Dataset v1 Release](https://github.com/atomityhq/forecasting-challenge/releases/tag/data-v1)
 
+### Automatic download (recommended)
+
+With the environment active, run from the repository root:
+
+```bash
+python -m cwfc.download
+```
+
+This downloads `data-v1.tar.gz`, extracts it into `challenge_data/`, and verifies `SHA256SUMS`. It does nothing if the verified files are already there. From Python: `from cwfc.download import download_data`.
+
+### Manual download
+
 Download `data-v1.tar.gz` from the release and extract it into the repository as `challenge_data/`:
 
 ```bash
