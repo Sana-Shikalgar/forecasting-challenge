@@ -1,0 +1,8 @@
+,MAE,RMSE,MAE ratio,Improvement %,High-load MAE,High-load RMSE,High-load bias,Fold MAE std,Folds better %
+Baseline,0.1943,0.2288,1.0,0.0,0.2944,0.3264,0.2942,0.0529,0.0
+all nine features,0.1808,0.2333,0.9301,6.9875,0.3026,0.336,0.2973,0.0874,53.8462
+"lags 1, 2, 3, 12 and mean_last_hour",0.1797,0.2328,0.9244,7.5567,0.303,0.3366,0.2974,0.0885,53.8462
+"lag_1, lag_12, mean_last_hour (selected)",0.1775,0.2318,0.9132,8.6761,0.3042,0.3379,0.2986,0.0902,53.8462
+lag_1 and mean_last_hour,0.1797,0.2343,0.9249,7.5064,0.3049,0.3386,0.2987,0.09,51.2821
+lag_12 and mean_last_hour,0.188,0.2397,0.9676,3.2432,0.3134,0.3445,0.3104,0.0841,48.7179
+no lag features (profile and hour position only),0.2207,0.2518,1.1358,-13.5776,0.3072,0.3393,0.3054,0.0468,0.0

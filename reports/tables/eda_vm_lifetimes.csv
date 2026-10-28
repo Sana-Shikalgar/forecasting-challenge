@@ -1,0 +1,8 @@
+,value
+vms_created_after_trace_start,0.0
+vms_deleted_within_training_window,0.0
+earliest_deletion_day,0.46875
+share_alive_at_trace_end,0.8213
+median_deletion_day,29.993055555555557
+trace_end_day,29.993055555555557
+training_window_end_day,0.3784722222222222

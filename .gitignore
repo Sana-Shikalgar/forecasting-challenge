@@ -1,4 +1,52 @@
-*.egg-info/
+# Challenge data (distributed as a GitHub Release, never committed)
+challenge_data/*
+!challenge_data/README.md
+*.tar.gz
+*.csv.gz
+SHA256SUMS
+
+# Environments
 .venv/
-.pytest_cache/
+venv/
+/env/
+.conda/
+
+# Python caches and build output
 __pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+credentials*.json
+
+# Large or derived artifacts
+/data/
+/artifacts/
+*.parquet
+*.pkl
+*.joblib
+*.h5
+*.pt
+
+# Local planning notes (not part of the submission)
+PLAN.md
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,15 @@
+# Conda environment. All Python dependencies live in pyproject.toml, so this
+# file only pins the interpreter and delegates to pip. Do not add packages here.
+#
+#   conda env create -f environment.yml
+#   conda activate atomity
+#
+# venv users: python -m venv .venv && pip install -e ".[dev]" (see README.md).
+name: atomity
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - -e .[dev]

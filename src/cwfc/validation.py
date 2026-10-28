@@ -11,6 +11,21 @@ class TimeSplit:
     validation_end: pd.Timestamp
 
 
+def origin_positions(n_obs: int, horizon: int, min_train_size: int, step: int | None = None) -> list[int]:
+    """Return the number of history points at each rolling origin (an expanding window).
+
+    The first origin has ``min_train_size`` points and each next one ``step`` more (default
+    ``horizon``), as long as ``horizon`` further points exist to forecast. The list is empty
+    if the series is too short. Raises ``ValueError`` if ``horizon``, ``min_train_size`` or
+    ``step`` is not positive.
+    """
+    if horizon <= 0 or min_train_size <= 0:
+        raise ValueError("horizon and min_train_size must be positive")
+    if step is not None and step <= 0:
+        raise ValueError("step must be positive")
+    return list(range(min_train_size, n_obs - horizon + 1, horizon if step is None else step))
+
+
 def rolling_origin_splits(
     frame: pd.DataFrame,
     timestamp_col: str = "timestamp",
@@ -20,21 +35,11 @@ def rolling_origin_splits(
 ) -> list[TimeSplit]:
     """Return expanding-window splits for evenly sampled time series.
 
-    `horizon=288` is one day at 5-minute cadence.
+    `horizon=288` is one day at 5-minute cadence. Raises ``ValueError`` if ``horizon``,
+    ``min_train_size`` or ``step`` is not positive, or the timestamps are not sorted.
     """
-    if horizon <= 0 or min_train_size <= 0:
-        raise ValueError("horizon and min_train_size must be positive")
+    positions = origin_positions(len(frame), horizon, min_train_size, step)
     ts = pd.to_datetime(frame[timestamp_col], utc=True)
     if not ts.is_monotonic_increasing:
         raise ValueError("timestamps must be sorted")
-    n = len(frame)
-    step = horizon if step is None else step
-    out: list[TimeSplit] = []
-    train_end_idx = min_train_size
-    while train_end_idx + horizon <= n:
-        train_end = ts.iloc[train_end_idx - 1]
-        val_start = ts.iloc[train_end_idx]
-        val_end = ts.iloc[train_end_idx + horizon - 1]
-        out.append(TimeSplit(train_end, val_start, val_end))
-        train_end_idx += step
-    return out
+    return [TimeSplit(ts.iloc[end - 1], ts.iloc[end], ts.iloc[end + horizon - 1]) for end in positions]

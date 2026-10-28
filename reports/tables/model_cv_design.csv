@@ -1,0 +1,7 @@
+,value
+training rows,110
+forecast horizon (steps),24
+first origin (history points),48
+last origin (history points),86
+number of origins,39
+high-load threshold,80% quantile of each origin's own history

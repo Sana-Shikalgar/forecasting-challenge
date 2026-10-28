@@ -1,0 +1,6 @@
+,value
+share_of_vms_above_high_level_mean,0.029517272727272732
+share_of_vms_above_high_level_outside_episode_median,0.0275
+share_of_vms_above_high_level_in_episode_max,0.045
+mean_interval_max_cpu_pct,18.44138155926884
+correlation_of_aggregate_with_share_above_high_level,0.8236571062616155
