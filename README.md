@@ -109,7 +109,7 @@ With either option active:
 python -m pytest -q
 ```
 
-The suite has 414 tests covering data checks, leakage, models, evaluation, the policy and the prediction command. It takes about one minute.
+The suite has 414 tests covering data checks, leakage, models, evaluation, the policy and the prediction command. It takes about one minute. One test uses the real data and is skipped until `python -m cwfc.download` has been run.
 
 ## Dataset download
 
@@ -185,7 +185,7 @@ jupyter nbconvert --to notebook --execute --inplace notebooks/02_modeling.ipynb
 jupyter nbconvert --to notebook --execute --inplace notebooks/03_policy.ipynb
 ```
 
-The EDA takes about half a minute, the modelling notebook about five minutes and the policy notebook about two. Model and policy logic lives in `src/cwfc/`; the notebooks call it and save their tables and figures under `reports/`.
+The EDA takes about half a minute, the modelling notebook about five minutes and the policy notebook about two. Model and policy logic lives in `src/cwfc/`; the notebooks call it and save their tables and figures under `reports/`. A fresh conda environment (Python 3.11) reproduced `predictions.csv` and every notebook result exactly. A fresh venv on Python 3.15 did the same except for floating-point noise and a few ARIMA tuning rows, which are explained in Appendix E of the report.
 
 ## Method
 
