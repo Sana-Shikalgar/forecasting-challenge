@@ -14,25 +14,36 @@ The challenge dataset is distributed as a versioned GitHub Release rather than c
 
 ## Environment setup
 
-Python **3.11 or newer** is required.
+Python **3.11 or newer** is required. Both options below install the same packages: all dependencies are declared in `pyproject.toml`, and `environment.yml` only pins Python and delegates to pip.
 
-Create a virtual environment:
+### Option A: conda (Miniconda / Anaconda)
 
-### Linux / macOS
+Run from the repository root:
+
+```bash
+conda env create -f environment.yml
+conda activate atomity
+```
+
+### Option B: venv
+
+Create and activate a virtual environment:
+
+#### Linux / macOS
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### Windows PowerShell
+#### Windows PowerShell
 
 ```powershell
 py -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-### Windows Command Prompt
+#### Windows Command Prompt
 
 ```cmd
 py -m venv .venv
@@ -46,7 +57,9 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-Verify the installation:
+### Verify the installation
+
+With either option active:
 
 ```bash
 python -m pytest -q
@@ -106,16 +119,9 @@ The challenge is intentionally open-ended. We evaluate reasoning, time-series me
 
 ## Expected environment
 
-Python 3.11+ is recommended.
+Python 3.11+ is recommended. See [Environment setup](#environment-setup) for the conda and venv instructions.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[dev]'
-pytest -q
-```
-
-Model dependencies are intentionally not prescribed. Add only what you need and document them.
+Model dependencies are intentionally not prescribed. Add only what you need to `pyproject.toml` (the single source of truth for both setups) and document them.
 
 ## Source
 
