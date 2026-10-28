@@ -123,6 +123,28 @@ The dataset contains 10,000 VMs with 134 CPU measurements per VM at five-minute 
 
 Use the exact `data-v1` release provided for this assignment. Do not substitute another dataset or a different version of the Azure Public Dataset.
 
+## Generate the predictions
+
+With the environment from [Environment setup](#environment-setup) active (conda or venv, the commands are the same) and the data downloaded, run from the repository root:
+
+```bash
+python -m cwfc.predict --data challenge_data --output predictions.csv
+```
+
+This fits the models on everything before the last 24 timestamps only, writes `predictions.csv` (24 rows with `timestamp`, `active_vm_count` and `aggregate_cpu_utilization`), and only then scores the holdout once, for reporting. Add `--save-report` to also save the holdout table and figure under `reports/`. The run stops with an error message, and writes nothing, if the training series has a gap, a duplicate timestamp or a timestamp without any valid reading. It warns if ARIMA falls back to the baseline.
+
+## Run the analysis notebooks
+
+With either environment active, from the repository root:
+
+```bash
+jupyter nbconvert --to notebook --execute --inplace notebooks/01_eda.ipynb
+jupyter nbconvert --to notebook --execute --inplace notebooks/02_modeling.ipynb
+jupyter nbconvert --to notebook --execute --inplace notebooks/03_policy.ipynb
+```
+
+The EDA takes about half a minute, the modelling notebook about five minutes and the policy notebook about two.
+
 ## What you are solving
 
 The underlying data contains anonymized VM workload telemetry sampled every five minutes. Your job is to understand the workload and build a defensible forecasting pipeline for near-term aggregate demand.
