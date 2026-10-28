@@ -103,6 +103,27 @@ def save_table(table: pd.DataFrame | pd.Series, name: str, directory: Path | Non
     return path
 
 
+def plot_heatmap(ax, matrix: pd.DataFrame, title: str, vmin: float = -1.0, vmax: float = 1.0):
+    """Draw a labelled heatmap of ``matrix`` on ``ax`` with each value written in its cell; return the image.
+
+    The color scale runs from ``vmin`` to ``vmax`` and missing values are left blank. Raises
+    ``ValueError`` if the matrix is empty.
+    """
+    if matrix.empty:
+        raise ValueError("matrix must not be empty")
+    image = ax.imshow(matrix.to_numpy(dtype=float), cmap="RdBu_r", vmin=vmin, vmax=vmax, aspect="auto")
+    ax.set_xticks(range(matrix.shape[1]), [str(c) for c in matrix.columns], rotation=45, ha="right")
+    ax.set_yticks(range(matrix.shape[0]), [str(r) for r in matrix.index])
+    ax.grid(False)
+    for row in range(matrix.shape[0]):
+        for column in range(matrix.shape[1]):
+            value = matrix.iloc[row, column]
+            if np.isfinite(value):
+                ax.text(column, row, f"{value:.2f}", ha="center", va="center", fontsize=8)
+    ax.set_title(title)
+    return image
+
+
 def elapsed_hours(timestamps) -> np.ndarray:
     """Convert timestamps in seconds to hours since the first one (an empty input gives an empty array)."""
     values = np.asarray(timestamps, dtype=float)

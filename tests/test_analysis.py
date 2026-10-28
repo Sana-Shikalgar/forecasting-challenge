@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
@@ -575,3 +576,23 @@ def test_segment_helpers_put_missing_segment_values_under_no_metadata():
     metadata = pd.DataFrame({"vm_id": ["a", "b", "c"], "size": ["small", None, "large"]})
     assert an.NO_METADATA in an.segment_series(_long_readings(), metadata, "size").columns
     assert an.segment_summary(_long_readings(), metadata, "size").loc[an.NO_METADATA, "n_vms"] == 1
+
+
+def test_plot_heatmap_writes_each_value_and_labels_the_axes():
+    """Every finite cell gets its value as text, the labels match the frame, and missing cells stay blank."""
+    matrix = pd.DataFrame([[1.0, -0.5], [np.nan, 0.25]], index=["a", "b"], columns=["x", "y"])
+    fig, ax = plt.subplots()
+    image = an.plot_heatmap(ax, matrix, "Title")
+    texts = sorted(t.get_text() for t in ax.texts)
+    assert texts == ["-0.50", "0.25", "1.00"] and ax.get_title() == "Title"
+    assert [t.get_text() for t in ax.get_xticklabels()] == ["x", "y"] and [t.get_text() for t in ax.get_yticklabels()] == ["a", "b"]
+    assert image.get_clim() == (-1.0, 1.0)
+    plt.close(fig)
+
+
+def test_plot_heatmap_rejects_an_empty_matrix():
+    """An empty matrix raises ValueError instead of drawing nothing."""
+    fig, ax = plt.subplots()
+    with pytest.raises(ValueError, match="must not be empty"):
+        an.plot_heatmap(ax, pd.DataFrame(), "Title")
+    plt.close(fig)
