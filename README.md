@@ -9,9 +9,11 @@ AI assistance: Claude Code was used as an AI assistant for planning and coding.
 - `active_vm_count` is constant at 10,000 in the whole trace, so the forecast is the last observed value.
 - `aggregate_cpu_utilization` is forecast with ARIMA(1,0,0) plus the hourly profile of the training data. A random forest on the correction of that baseline is the machine learning comparison.
 - Model choice uses rolling-origin cross-validation on the 110 training points only. The final 24 values are never used for fitting, selection or tuning, and are scored once after `predictions.csv` is written.
-- Cross-validation MAE (percentage points of CPU): baseline 0.194, ARIMA 0.179, random forest 0.178. The gain over the baseline is about 8% and the two models are not separable. There are only about 2.6 independent 24-step windows in 110 points.
+- Cross-validation MAE (percentage points of CPU): baseline 0.194, ARIMA 0.179, random forest 0.177. The gain over the baseline is about 8% and the two models are not separable. There are only about 2.6 independent 24-step windows in 110 points.
 - Holdout MAE, reported once: ARIMA 0.091, random forest 0.123, baseline 0.161. The count forecast is exact.
 - Capacity policy: forecast plus a margin taken from past forecast errors, applied only when recent load is in the top 20% of the history so far. The margin is the smallest one that keeps at most 5% of high-load values above capacity in cross-validation.
+
+The full write-up is in [`reports/final_report.md`](reports/final_report.md), with a PDF copy in `reports/final_report.pdf`.
 
 ## Repository layout
 
@@ -47,6 +49,8 @@ forecasting-challenge/
 │   ├── 02_modeling.ipynb     # validation design, models, comparison
 │   └── 03_policy.ipynb       # error analysis, intervals, headroom
 ├── reports/
+│   ├── final_report.md       # final report (markdown)
+│   ├── final_report.pdf      # final report (PDF, 7 page body plus appendices)
 │   ├── figures/              # figures saved by the notebooks and predict.py
 │   └── tables/               # tables saved by the notebooks and predict.py
 └── tests/                    # pytest suite, one file per module
