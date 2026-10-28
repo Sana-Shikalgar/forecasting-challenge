@@ -1,0 +1,5 @@
+,nominal level,out-of-time coverage,values checked,same-sample coverage,mean width (pp)
+"80% interval, absolute-error quantile",0.8,0.9081,468.0,0.7949,0.6293
+"80% interval, signed quantiles",0.8,0.4573,468.0,,0.4386
+"90% interval, absolute-error quantile",0.9,0.9359,468.0,0.8974,0.7606
+"90% interval, signed quantiles",0.9,0.5171,468.0,,0.5254

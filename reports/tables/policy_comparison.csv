@@ -1,0 +1,8 @@
+,under-provisioned share,mean shortfall,mean excess,mean margin,high-load under-provisioned share,cost at ratio 1,cost at ratio 2,cost at ratio 5,cost at ratio 10,cost at ratio 20
+no margin,0.1197,0.012,0.1316,0.0,0.6452,0.1436,0.1556,0.1916,0.2516,0.3717
+"always on, quantile 0.8",0.0064,0.0006,0.4248,0.3047,0.0484,0.4254,0.426,0.4277,0.4305,0.4361
+"trigger on, quantile 0.8",0.0256,0.001,0.2243,0.1036,0.0484,0.2253,0.2263,0.2294,0.2346,0.245
+"always on, quantile 0.9",0.0021,0.0,0.4981,0.3785,0.0161,0.4981,0.4981,0.4981,0.4982,0.4983
+"trigger on, quantile 0.9",0.0214,0.0005,0.2451,0.1251,0.0161,0.2456,0.2461,0.2476,0.25,0.2548
+"always on, quantile 0.95",0.0,0.0,0.5551,0.4355,0.0,0.5551,0.5551,0.5551,0.5551,0.5551
+"trigger on, quantile 0.95",0.0192,0.0005,0.2648,0.1448,0.0,0.2653,0.2658,0.2672,0.2695,0.2742
