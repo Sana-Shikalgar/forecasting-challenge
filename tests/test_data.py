@@ -17,8 +17,8 @@ from cwfc.data import (
     check_readings,
     load_metadata,
     load_readings,
-    load_targets,
     require_columns,
+    select_timestamps,
     split_holdout,
 )
 from cwfc.download import default_data_dir
@@ -66,6 +66,15 @@ def _metadata(**overrides) -> pd.DataFrame:
     for column, values in overrides.items():
         frame[column] = values
     return frame
+
+
+# shared constants
+
+
+def test_time_constants_are_consistent():
+    """The 5-minute step divides the hour evenly and the holdout covers two hours."""
+    assert data.STEPS_PER_HOUR == 12 and data.STEPS_PER_HOUR * data.INTERVAL_SECONDS == data.SECONDS_PER_HOUR
+    assert data.SECONDS_PER_DAY == 86400 and data.HOLDOUT_HORIZON == 2 * data.STEPS_PER_HOUR
 
 
 # require_columns
@@ -443,14 +452,25 @@ def test_build_targets_aggregate_stays_within_bounds_for_random_data():
     assert ((aggregate >= 0) & (aggregate <= 100)).all()
 
 
-# load_targets
+# select_timestamps
 
 
-def test_load_targets_reads_files_and_builds_series(tmp_path):
+def test_select_timestamps_keeps_only_listed_timestamps():
+    """Only readings at the listed timestamps are kept, in their original order."""
+    frame = _readings([(0, "a", 1.0), (300, "a", 2.0), (600, "a", 3.0), (300, "b", 4.0)])
+    kept = select_timestamps(frame, [300, 600])
+    assert kept["avg_cpu"].tolist() == [2.0, 3.0, 4.0]
+    assert select_timestamps(frame, []).empty and len(frame) == 4
+
+
+# end to end
+
+
+def test_readings_file_to_targets_without_metadata(tmp_path):
     """End to end: gzip CSV in, target series out, no metadata present."""
     rows = [(t, vm, 10.0 * (i + 1)) for i, t in enumerate((0, 300)) for vm in ("a", "b")]
     folder = _write_readings(tmp_path / "data", _full_readings(rows))
-    targets = load_targets(folder)
+    targets = build_targets(load_readings(folder))
     assert targets[ACTIVE_VM_COUNT].tolist() == [2, 2]
     assert targets[AGGREGATE_CPU].tolist() == [10.0, 20.0]
 
@@ -522,3 +542,26 @@ def test_real_data_has_expected_shape_and_split():
     assert targets[AGGREGATE_CPU].between(0, 100).all()
     train, holdout = split_holdout(targets)
     assert len(train) == 110 and len(holdout) == 24
+
+
+# edge cases found in an audit
+
+
+def test_build_targets_rejects_missing_timestamps():
+    """A NaN timestamp cannot be placed in the series, so ValueError is raised."""
+    frame = pd.DataFrame({"timestamp": [0.0, np.nan], "vm_id": ["a", "b"], "avg_cpu": [1.0, 2.0]})
+    with pytest.raises(ValueError, match="missing timestamps"):
+        build_targets(frame)
+
+
+@pytest.mark.parametrize("horizon", [24.0, True, "24", None])
+def test_split_holdout_rejects_non_integer_horizons(horizon):
+    """A float, boolean, string or None horizon raises ValueError."""
+    with pytest.raises(ValueError, match="positive integer"):
+        split_holdout(pd.Series(range(40), index=np.arange(40)), horizon=horizon)
+
+
+def test_split_holdout_accepts_numpy_integer_horizon():
+    """A numpy integer is a valid horizon."""
+    train, holdout = split_holdout(pd.Series(range(40), index=np.arange(40)), horizon=np.int64(5))
+    assert len(train) == 35 and len(holdout) == 5
