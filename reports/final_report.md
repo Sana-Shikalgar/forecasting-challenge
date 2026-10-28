@@ -265,3 +265,5 @@ The missed lines are the `main()` calls under `if __name__ == "__main__"`. The t
 | ARIMA(4,0,1) with profile | 0.177 | 0.218 | 22 (not trusted) |
 
 Selection rule: the lowest MAE and RMSE among settings with at most 2 fallback origins (`model_arima_grid.csv`).
+
+Reproducibility note: the notebooks were re-run in a fresh venv on Python 3.15 and in the conda environment on Python 3.11. Predictions, all other tables and every printed result were identical apart from floating-point noise. The numbers in this table are the exception for some settings: the optimiser warns or fails near the stability boundary, so the fallback counts and MAE of ARIMA(2,0,0), (3,0,0) and (6,0,0) with the profile moved by up to 0.005 pp and 1 to 2 origins. The metrics of the chosen ARIMA(1,0,0) with the profile agreed to 8 digits, and the selection is unchanged.
