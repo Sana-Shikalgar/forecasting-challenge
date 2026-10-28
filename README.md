@@ -189,6 +189,10 @@ The EDA takes about half a minute, the modelling notebook about five minutes and
 - **Metrics:** MAE, RMSE, MAE ratio to the baseline, error by horizon step, and error on high-load values.
 - **Policy:** prediction intervals from absolute forecast errors, and a headroom rule that adds a margin only when a peak-risk trigger is on. At the end of the training data the trigger is off, so the plan is the forecast itself.
 
+## Notes on the starter code
+
+`baselines.py`, `metrics.py` and `validation.py` come from the starter. They are kept and used, with docstrings, input checks and an `origin_positions` helper added. In `validation.py`, `rolling_origin_splits` and `TimeSplit` are kept as provided but are not used by the pipeline, which splits by index position instead. The unused starter `smape` function was removed.
+
 ## Data source and attribution
 
 The data is a curated subset of the Microsoft Azure Public Dataset V2 (https://github.com/Azure/AzurePublicDataset). Attribution to the Azure Public Dataset is retained, and its current license and usage terms apply. See [`SOURCES.md`](SOURCES.md) and the `DATA_CARD.md` in the release. No external dataset is used.
