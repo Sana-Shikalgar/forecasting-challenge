@@ -2,6 +2,8 @@
 
 Forecast the last two hours (24 five-minute points) of `active_vm_count` and `aggregate_cpu_utilization` from the first 110 points of the Microsoft Azure Public Dataset V2 VM trace, and turn the forecast into a capacity recommendation.
 
+AI assistance: Claude Code was used as an AI assistant for planning and coding.
+
 ## Summary
 
 - `active_vm_count` is constant at 10,000 in the whole trace, so the forecast is the last observed value.
