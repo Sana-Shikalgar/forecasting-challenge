@@ -1,0 +1,6 @@
+series,model,MAE,RMSE,MAE ratio
+aggregate_cpu_utilization,Baseline,0.16141034008110178,0.19347511694348216,1.0
+aggregate_cpu_utilization,ARIMA,0.09098048227530893,0.10404393771698722,0.5636595662309809
+aggregate_cpu_utilization,Random forest,0.12278623507138005,0.1395954869654076,0.7607086076993904
+aggregate_cpu_utilization,Persistence,0.14678245915042454,0.18478539074333752,0.9093745733803215
+active_vm_count,Persistence,0.0,0.0,
