@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cloud-workload-forecasting"
 version = "1.0.0"
-description = "Candidate starter utilities for a cloud workload forecasting take-home"
+description = "Forecasting pipeline for VM count and aggregate CPU utilization on the Azure Public Dataset V2 subset"
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.26",
