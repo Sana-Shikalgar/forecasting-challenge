@@ -10,7 +10,7 @@ Cloud Workload Forecasting Challenge, Microsoft Azure Public Dataset V2 (`data-v
 - **The CPU level is stable but not flat.** `aggregate_cpu_utilization` has a mean of 9.41% and a standard deviation of 0.19 pp. It moves through a repeating one-hour pattern (a dip of about 0.2 pp at minute 20, seen in 9 of 9 hours) and one level shift (+0.39 pp for about 1.7 hours).
 - **Forecasts help, modestly.** A strong baseline (training mean plus hourly profile) has a cross-validated MAE of 0.194 pp. The chosen model, ARIMA(1,0,0) with the hourly profile as an input, reaches 0.179 pp (8.1% lower), and 0.082 pp against 0.198 pp five minutes ahead. The gain is gone by about one hour ahead. A random forest reaches 0.177 pp, a tie.
 - **Holdout** (scored once, after `predictions.csv` was written): ARIMA MAE 0.091 pp, RMSE 0.104 pp, 0.56 times the baseline's MAE (0.161 pp). One two-hour window cannot rank models, so it was reported and never used for a choice.
-- **Advice.** Every model under-forecasts peaks (by 0.22 to 0.30 pp at high-load values), and the start of a level shift cannot be forecast. Plan at the forecast, and add a margin from earlier errors only when the mean of the last three observations is at or above the 80th percentile of the history. In cross-validation this leaves 4.8% of high-load values above capacity with a mean margin of 0.10 pp, against 0.31 pp for an always-on margin with the same protection. The trigger is off now, so the plan for the next two hours is the forecast (9.20% to 9.40%).
+- **Advice.** All three models under-forecast peaks (by 0.22 to 0.30 pp at high-load values), and the start of a level shift cannot be forecast. Plan at the forecast, and add a margin from earlier errors only when the mean of the last three observations is at or above the 80th percentile of the history. In cross-validation this leaves 4.8% of high-load values above capacity with a mean margin of 0.10 pp, against 0.31 pp for an always-on margin with the same protection. The trigger is off now, so the plan for the next two hours is the forecast (9.20% to 9.40%).
 
 **Caveat.** 110 training points are about 2.6 independent 24-step windows and one main episode. The fleet-level workload is predictable, and ARIMA with the hourly profile is a sound, simple choice, but its gain over the baseline (0.016 pp of MAE) is small next to the origin-to-origin spread of its error (standard deviation 0.058 pp) and rests on one episode.
 
@@ -18,7 +18,7 @@ Cloud Workload Forecasting Challenge, Microsoft Azure Public Dataset V2 (`data-v
 
 **Data.** `vm_cpu_readings.csv.gz` has 1,340,000 rows: 10,000 VMs with 134 readings each on an exact 300-second grid. `vm_metadata.csv.gz` describes the same VMs. `01_eda.ipynb` found no duplicates, no missing ids or values, no out-of-range readings and exactly 10,000 reporting VMs at every timestamp.
 
-**Targets** (`data.py`). Readings are grouped by timestamp. `active_vm_count` is the number of distinct VMs, so each counts once. `aggregate_cpu_utilization` is the mean `avg_cpu` over readings that are present and inside [0, 100]. A timestamp with no valid reading, a gap or a duplicate is never filled in: the pipeline stops with a clear error. The modelling cadence is the native 5 minutes, so no mapping back is needed, and `predictions.csv` carries the raw holdout timestamps.
+**Targets** (`data.py`). Readings are grouped by timestamp. `active_vm_count` is the number of distinct VMs, so each counts once. `aggregate_cpu_utilization` is the mean `avg_cpu` over readings that are present and inside [0, 100]. In the training window, a timestamp with no valid reading, a gap or a duplicate is never filled in: the pipeline stops with a clear error. The modelling cadence is the native 5 minutes, so no mapping back is needed, and `predictions.csv` carries the raw holdout timestamps.
 
 **Split.** The full target series is built first. The last 24 timestamps (2 hours) are the holdout and the 110 before them (9.2 hours) the training window; the 24 is derived from the series length. All statistics, features and choices use the training rows only. The data-quality counts above are the one look at all 134 timestamps, and the choice of forecaster for the count rests on the training window alone.
 
@@ -119,7 +119,7 @@ Both models beat a strong baseline by about 8%, a real but modest gain, because 
 
 <img src="figures/holdout_forecast.png" alt="Holdout forecasts against the observed values" width="560">
 
-*Figure 4. Holdout forecasts against the observed values. The forecasts were frozen before the holdout was read.*
+*Figure 4. Holdout forecasts against the observed values. The forecasts were written before the holdout values were used.*
 
 The holdout agrees with cross-validation that ARIMA beats the baseline, with a larger gain (0.56 against 0.92). In Figure 4 the baseline and forest forecasts sit above the observed values for most of the window, while ARIMA, which starts from the low last observation, is closer. One window is one sample: it does not show that ARIMA beats the forest, and nothing in it changed the model.
 
